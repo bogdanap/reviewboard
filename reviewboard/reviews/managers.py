@@ -10,6 +10,30 @@ from djblets.util.db import ConcurrencyManager
 
 from reviewboard.diffviewer.models import DiffSetHistory
 from reviewboard.scmtools.errors import ChangeNumberInUseError
+from reviewboard.site.models import LocalSite
+
+
+class ActionFeedManager(Manager):
+    """A manager for Action model."""
+
+    def for_user(self, user, local_site_name, older_than=None):
+        """Returns the action feed for the user."""
+        actions = self.extra(
+            tables=['accounts_reviewrequestvisit'],
+            where=['accounts_reviewrequestvisit.user_id = %s' % user.pk,
+                   'accounts_reviewrequestvisit.review_request_id = '
+                   'reviews_action.review_request_id'])
+
+        if older_than:
+            actions = actions.filter(timestamp__lt=older_than)
+
+        try:
+            local_site = LocalSite.objects.get(name=local_site_name)
+            local_site_id = local_site.pk
+        except LocalSite.DoesNotExist:
+            local_site_id = None
+
+        return actions.filter(local_site_id=local_site_id)
 
 
 class DefaultReviewerManager(Manager):

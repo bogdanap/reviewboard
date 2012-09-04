@@ -671,6 +671,9 @@ class DashboardDataGrid(ReviewRequestDataGrid):
             self.queryset = ReviewRequest.objects.to_user(
                 user, user, local_site=self.local_site)
             self.title = _(u"All Incoming Review Requests")
+        elif view == 'action-feed':
+            self.queryset = ReviewRequest.objects.public()
+            self.title = _(u"Latest Changes")
         else:
             raise Http404
 

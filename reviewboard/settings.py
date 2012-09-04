@@ -140,7 +140,7 @@ RB_BUILTIN_APPS = [
     'djblets.siteconfig',
     'djblets.util',
     'djblets.webapi',
-    'pipeline', # Must be after djblets.pipeline
+    'pipeline',  # Must be after djblets.pipeline
     'reviewboard.accounts',
     'reviewboard.admin',
     'reviewboard.attachments',
@@ -168,7 +168,7 @@ AUTH_PROFILE_MODULE = "accounts.Profile"
 
 # Default expiration time for the cache.  Note that this has no effect unless
 # CACHE_BACKEND is specified in settings_local.py
-CACHE_EXPIRATION_TIME = 60 * 60 * 24 * 30 # 1 month
+CACHE_EXPIRATION_TIME = 60 * 60 * 24 * 30  # 1 month
 
 # Custom test runner, which uses nose to find tests and execute them.  This
 # gives us a somewhat more comprehensive test execution than django's built-in
@@ -240,11 +240,17 @@ LOGIN_URL = SITE_ROOT + 'account/login/'
 # Cookie settings
 LANGUAGE_COOKIE_NAME = "rblanguage"
 SESSION_COOKIE_NAME = "rbsessionid"
-SESSION_COOKIE_AGE = 365 * 24 * 60 * 60 # 1 year
+SESSION_COOKIE_AGE = 365 * 24 * 60 * 60  # 1 year
 SESSION_COOKIE_PATH = SITE_ROOT
 
 # Media compression
 PIPELINE_JS = {
+    'action-feed': {
+        'source_filenames': (
+            'rb/js/action-feed.js',
+        ),
+        'output_filename': 'rb/js/action-feed.min.js',
+    },
     'common': {
         'source_filenames': (
             'rb/js/jquery.form.js',
@@ -290,6 +296,13 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'rb/css/common.min.css',
         'absolute_paths': False,
+    },
+    'action-feed': {
+        'source_filenames': (
+            'rb/css/action-feed.less',
+        ),
+        'output_filename': 'rb/css/action-feed.min.css',
+        'absolute_paths': False
     },
     'reviews': {
         'source_filenames': (

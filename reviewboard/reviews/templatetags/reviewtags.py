@@ -360,6 +360,8 @@ def dashboard_entry(context, level, text, view, param=None):
     elif view == "url":
         url = param
         show_count = False
+    elif view == "action-feed":
+        show_count = False
     else:
         raise template.TemplateSyntaxError, \
             "Invalid view type '%s' passed to 'dashboard_entry' tag." % view

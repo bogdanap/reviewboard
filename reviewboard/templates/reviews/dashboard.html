@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load compressed %}
 {% load djblets_deco %}
 {% load i18n %}
 {% load reviewtags %}
@@ -10,17 +11,29 @@
 <meta http-equiv="refresh" content="300" />
 {% endblock %}
 
+{% if view == 'action-feed' %}
+{%  block jsconsts %}
+  var gSitePrefix = "{% if local_site %}s/{{local_site}}/{% endif %}";
+{%  endblock %}
+{% endif %}
+
 {% block css %}
 {{block.super}}
 <link rel="stylesheet" type="text/css" href="{% static "djblets/css/datagrid.css" %}" />
+{%  if view == 'action-feed' %}
+{%   compressed_css "action-feed" %}
+{%  endif %}
 {% endblock %}
 
 {% block scripts-post %}
 <script type="text/javascript" src="{% static "djblets/js/datagrid.js" %}"></script>
+{%  if view == 'action-feed' %}
+{%   compressed_js "action-feed" %}
+{%  endif %}
 {% endblock %}
 
 {% block content %}
-{% box "dashboard" %}
+{%  box "dashboard" %}
 <div id="dashboard-wrapper">
  <table class="datagrid" id="dashboard-navbar">
   <colgroup>
@@ -28,33 +41,43 @@
    <col class="count" />
   </colgroup>
   <tbody>
-{% dashboard_entry "main-item" "Starred Reviews"  "starred" %}
-{% dashboard_entry "main-item" "Outgoing Reviews" "outgoing" %}
-{% dashboard_entry "main-item" "Incoming Reviews" "incoming" %}
-{% dashboard_entry "sub-item"  "To Me"            "to-me" %}
-{% for name, value in datagrid.counts.groups.items %}
-{%  dashboard_entry "sub-item" name "to-group" name %}
-{% endfor %}
-{% if datagrid.counts.starred_groups %}
-{%  dashboard_entry "main-item" "Watched Groups" "watched-groups" %}
-{%  for name, value in datagrid.counts.starred_groups.items %}
+{%  dashboard_entry "main-item" "Action Feed"      "action-feed" %}
+{%  dashboard_entry "main-item" "Starred Reviews"  "starred" %}
+{%  dashboard_entry "main-item" "Outgoing Reviews" "outgoing" %}
+{%  dashboard_entry "main-item" "Incoming Reviews" "incoming" %}
+{%  dashboard_entry "sub-item"  "To Me"            "to-me" %}
+{%  for name, value in datagrid.counts.groups.items %}
 {%   dashboard_entry "sub-item" name "to-group" name %}
 {%  endfor %}
-{% endif %}
-{% dashboard_entry "main-item" "All My Requests" "mine" %}
-{% for hook in sidebar_hooks %}
-{%  for main_entry in hook.entries %}
-{%   dashboard_entry "main-item" main_entry.label "url" main_entry.url %}
-{%   for sub_entry in main_entry.subitems %}
-{%    dashboard_entry "sub-item" sub_entry.label "url" sub_entry.url %}
+{%  if datagrid.counts.starred_groups %}
+{%   dashboard_entry "main-item" "Watched Groups" "watched-groups" %}
+{%   for name, value in datagrid.counts.starred_groups.items %}
+{%    dashboard_entry "sub-item" name "to-group" name %}
+{%   endfor %}
+{%  endif %}
+{%  dashboard_entry "main-item" "All My Requests" "mine" %}
+{%  for hook in sidebar_hooks %}
+{%   for main_entry in hook.entries %}
+{%    dashboard_entry "main-item" main_entry.label "url" main_entry.url %}
+{%    for sub_entry in main_entry.subitems %}
+{%     dashboard_entry "sub-item" sub_entry.label "url" sub_entry.url %}
+{%    endfor %}
 {%   endfor %}
 {%  endfor %}
-{% endfor %}
   </tbody>
  </table>
  <div id="dashboard-main" class="clearfix">
-{{datagrid.render_listview}}
+{%  if view == 'action-feed' %}
+ <div class="container-action-feed">
+  <div id="action-feed-content"></div>
+  <div class="load-more-actions">
+   <input type="button" class="load-more-button" id="load-more-actions" value="Load more"/>
+  </div>
+ </div>
+{%  else %}
+    {{datagrid.render_listview}}
+{%  endif %}
  </div>
 </div>
-{% endbox %}
+{%  endbox %}
 {% endblock %}

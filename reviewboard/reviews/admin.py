@@ -3,10 +3,16 @@ from django.template.defaultfilters import truncatechars
 from django.utils.translation import ugettext_lazy as _
 
 from reviewboard.reviews.forms import DefaultReviewerForm, GroupForm
-from reviewboard.reviews.models import Comment, DefaultReviewer, Group, \
-                                       Review, ReviewRequest, \
+from reviewboard.reviews.models import Action, Comment, DefaultReviewer, \
+                                       Group, Review, ReviewRequest,  \
                                        ReviewRequestDraft, Screenshot, \
                                        ScreenshotComment, FileAttachmentComment
+
+
+class ActionAdmin(admin.ModelAdmin):
+    list_display = ('review_request', 'summary', 'verb', 'submitter',
+                    'timestamp', 'review', 'changedesc', 'local_site',
+                    'local_id')
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -24,6 +30,7 @@ class CommentAdmin(admin.ModelAdmin):
     def truncated_text(self, obj):
         return truncatechars(obj.text, 60)
     truncated_text.short_description = _('Comment Text')
+
 
 class DefaultReviewerAdmin(admin.ModelAdmin):
     form = DefaultReviewerForm
@@ -232,6 +239,7 @@ class FileAttachmentCommentAdmin(admin.ModelAdmin):
     review_request_id.short_description = _('Review request ID')
 
 
+admin.site.register(Action, ActionAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(DefaultReviewer, DefaultReviewerAdmin)
 admin.site.register(Group, GroupAdmin)

@@ -30,7 +30,8 @@ from djblets.util.misc import get_object_or_none
 
 from reviewboard.accounts.decorators import check_login_required, \
                                             valid_prefs_required
-from reviewboard.accounts.models import ReviewRequestVisit, Profile
+from reviewboard.accounts.models import Profile, \
+                                        ReviewRequestVisit
 from reviewboard.attachments.forms import UploadFileForm, CommentFileForm
 from reviewboard.changedescs.models import ChangeDescription
 from reviewboard.diffviewer.diffutils import get_file_chunks_in_range
@@ -48,6 +49,7 @@ from reviewboard.reviews.errors import OwnershipError
 from reviewboard.reviews.forms import NewReviewRequestForm, \
                                       UploadDiffForm, \
                                       UploadScreenshotForm
+
 from reviewboard.reviews.models import Comment, \
                                        FileAttachmentComment, \
                                        Group, ReviewRequest, Review, \
@@ -818,6 +820,7 @@ def dashboard(request,
         * 'watched-groups'
         * 'incoming'
         * 'mine'
+        * 'action-feed'
     """
     view = request.GET.get('view', None)
 
@@ -832,12 +835,32 @@ def dashboard(request,
         # This is special. We want to return a list of groups, not
         # review requests.
         grid = WatchedGroupDataGrid(request, local_site=local_site)
+    elif view == "action-feed":
+        grid = ActionFeed(request, local_site=local_site)
     else:
         grid = DashboardDataGrid(request, local_site=local_site)
 
     return grid.render_to_response(template_name, extra_context={
         'sidebar_hooks': DashboardHook.hooks,
+        'view': view,
     })
+
+
+class ActionFeed(DashboardDataGrid):
+    def __init__(self, request, local_site=None):
+        super(ActionFeed, self).__init__(request, local_site)
+
+    def render_to_response(self, template_name, extra_context={}):
+        self.load_state()
+        context = {
+            'user': self.request.user,
+            'local_site': self.local_site,
+            'datagrid': self,
+        }
+        context.update(extra_context)
+
+        return render_to_response(template_name, RequestContext(self.request,
+                                                                context))
 
 
 @check_login_required

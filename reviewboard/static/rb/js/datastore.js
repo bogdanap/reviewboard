@@ -1,3 +1,101 @@
+RB.Action = function(action_id, expand, prefix) {
+    this.prefix = prefix;
+    this.id = action_id;
+    this.expand = expand;
+    this.loaded = false;
+    return this;
+};
+
+$.extend(RB.Action.prototype, {
+    ready: function(on_ready) {
+        if (this.loaded) {
+            on_ready.apply(this, arguments);
+        } else {
+            this._load(on_ready);
+        }
+    },
+
+    _load: function(on_done) {
+        var self = this;
+
+        if (!self.id) {
+            on_done.apply(this, arguments);
+            return;
+        }
+
+        RB.apiCall({
+            type: "GET",
+            prefix: self.prefix,
+            path: "/session/actions/" + this.id + "?expand=" + this.expand,
+            success: function(rsp, status) {
+                if (status != 404) {
+                    self._loadDataFromResponse(rsp);
+                }
+                on_done.apply(this, arguments);
+            }
+        });
+    },
+
+    _loadDataFromResponse: function(rsp) {
+        this.id = rsp.action.id;
+        this.links = rsp.action.links;
+        this.changedesc = rsp.action.changedesc;
+        this.review = rsp.action.review;
+        this.timestamp = rsp.action.timestamp;
+        this.type = rsp.action.type;
+        this.verb = rsp.action.verb;
+        this.loaded = true;
+    }
+});
+
+RB.ActionList = function(last_timestamp, expand, disable, prefix) {
+    this.prefix = prefix;
+    this.last_timestamp = last_timestamp;
+    this.expand = expand;
+    this.loaded = false;
+    this.disable = disable;
+    this.max_results = 15;
+    return this;
+};
+
+$.extend(RB.ActionList.prototype, {
+    ready: function(on_ready) {
+        if (this.loaded) {
+            on_ready.apply(this, arguments);
+        } else {
+            this._load(on_ready);
+        }
+    },
+
+    _load: function(on_done) {
+        var self = this,
+            path = "/session/actions?&max-results=" + self.max_results +
+                   "&expand=" + this.expand;
+
+        if (self.last_timestamp) {
+            path += '&timestamp-to=' + self.last_timestamp;
+        }
+        RB.apiCall({
+            type: "GET",
+            buttons: self.disable,
+            prefix: self.prefix,
+            path: path,
+            success: function(rsp, status) {
+                if (status != 404) {
+                    self._loadDataFromResponse(rsp);
+                }
+
+                on_done.apply(this, arguments);
+            }
+        });
+    },
+
+    _loadDataFromResponse: function(rsp) {
+        this.actions = rsp.actions;
+        this.loaded = true;
+    }
+});
+
 RB.DiffComment = function(review, id, filediff, interfilediff, beginLineNum,
                           endLineNum) {
     this.id = id;

@@ -52,7 +52,7 @@ from reviewboard.hostingsvcs.models import HostingServiceAccount
 from reviewboard.hostingsvcs.service import get_hosting_service
 from reviewboard.reviews.errors import PermissionError
 from reviewboard.reviews.forms import UploadDiffForm, UploadScreenshotForm
-from reviewboard.reviews.models import BaseComment, Comment, DiffSet, \
+from reviewboard.reviews.models import Action, BaseComment, Comment, DiffSet, \
                                        FileDiff, Group, Repository, \
                                        ReviewRequest, ReviewRequestDraft, \
                                        Review, ScreenshotComment, Screenshot, \
@@ -201,6 +201,114 @@ class WebAPIResource(DjbletsWebAPIResource):
             local_site_reverse(self._build_named_url(self.name),
                                request=request,
                                kwargs=href_kwargs))
+
+
+class ActionResource(WebAPIResource):
+    """Provides information on an action performed by a user on a
+    specified review request.
+
+    Each action includes the summary and a reference to the review
+    request it was performed on, the user performed it, a verb
+    describing the action and the action type. The action can either
+    be a review or a change description and it contains references to
+    either one of these objects.
+    """
+    name = 'action'
+    model = Action
+    fields = {
+        'id': {
+            'type': int,
+            'description': 'The numeric ID of the action.',
+        },
+        'review_request': {
+            'type': 'reviewboard.webapi.resources.ReviewRequestResource',
+            'description': 'The review request.',
+        },
+        'summary': {
+            'type': str,
+            'description': 'Review request summary.',
+        },
+        'submitter': {
+            'type': 'reviewboard.webapi.resources.UserResource',
+            'description': 'The user that performed the action.',
+        },
+        'review': {
+            'type': 'reviewboard.webapi.resources.ReviewResource',
+            'description': 'The review that was posted.',
+        },
+        'changedesc': {
+            'type': 'reviewboard.webapi.resources.ChangeResource',
+            'description': 'The change description.',
+        },
+        'request_display_id': {
+            'type': int,
+            'description': 'The local site review request id.',
+        },
+        'type': {
+            'type': str,
+            'description': 'The type of the action. Either "change", "review" or "reply"',
+        },
+        'verb': {
+            'type': str,
+            'description': 'The verb used for describing the action.'
+        },
+        'display_verb': {
+            'type': str,
+            'description': 'Human-readable version of the verb.'
+        },
+        'timestamp': {
+            'type': str,
+            'description': 'The date and time that the change was made '
+                           '(in YYYY-MM-DD HH:MM:SS format).',
+        },
+        'timesince': {
+            'type': str,
+            'descriptions': 'The timestamp in timesince format.',
+        }
+    }
+    uri_object_key = 'action_id'
+    last_modified_field = 'timestamp'
+    allowed_methods = ('GET',)
+
+    @webapi_request_fields(
+        optional={
+            'timestamp-to': {
+                'type': str,
+                'description': 'The date/time that all actions must be added before.'
+            },
+        },
+        allow_unknown=True
+    )
+    @webapi_login_required
+    @webapi_check_local_site
+    @augment_method_from(WebAPIResource)
+    def get_list(self, *args, **kwargs):
+        """Returns a list of changes made on a review request."""
+        pass
+
+    @webapi_login_required
+    @webapi_check_local_site
+    @augment_method_from(WebAPIResource)
+    def get(self, *args, **kwargs):
+        """Returns the information on a change to a review request."""
+        pass
+
+    def get_queryset(self, request, is_list=False, local_site_name=None,
+                    *args, **kwargs):
+        older_than = None
+        try:
+            if 'timestamp-to' in request.GET:
+                older_than = dateutil.parser.parse(request.GET.get('timestamp-to'))
+        except ValueError:
+            older_than = None
+
+        return self.model.objects.for_user(request.user, local_site_name,
+                                           older_than)
+
+    def serialize_timesince_field(self, obj):
+        return timesince(obj.timestamp)
+
+action_resource= ActionResource()
 
 
 class BaseCommentResource(WebAPIResource):
@@ -5180,6 +5288,10 @@ class ReviewReplyResource(BaseReviewResource):
     name = 'reply'
     name_plural = 'replies'
     fields = {
+        'base_reply_to': {
+            'type': 'reviewboard.webapi.resources.BaseReviewResource',
+            'description': 'The review that this is replying to.'
+        },
         'body_bottom': {
             'type': str,
             'description': 'The response to the review content below '
@@ -6543,6 +6655,9 @@ class SessionResource(WebAPIResource):
     """
     name = 'session'
     singleton = True
+    item_child_resources = [
+        action_resource,
+    ]
 
     @webapi_check_local_site
     @webapi_check_login_required
@@ -6630,6 +6745,7 @@ class RootResource(DjbletsRootResource):
 root_resource = RootResource()
 
 
+register_resource_for_model(Action, action_resource)
 register_resource_for_model(ChangeDescription, change_resource)
 register_resource_for_model(
     Comment,

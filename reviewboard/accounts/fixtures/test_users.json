@@ -1,207 +1,1167 @@
 [
     {
-        "pk": 1, 
-        "model": "auth.user", 
+        "pk": 28,
+        "model": "auth.permission",
         "fields": {
-            "username": "admin", 
-            "first_name": "Admin", 
-            "last_name": "User", 
-            "is_active": true, 
-            "is_superuser": true, 
-            "is_staff": true, 
-            "last_login": "2010-12-03T16:48:53+00:00", 
-            "groups": [], 
-            "user_permissions": [], 
-            "password": "sha1$b2c09$12c1820af5195a026c703a6149467800d7937dd6", 
-            "email": "admin@example.com", 
-            "date_joined": "2007-06-24T00:02:37+00:00"
+            "codename": "add_localsiteprofile",
+            "name": "Can add local site profile",
+            "content_type": 12
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "auth.user", 
+        "pk": 31,
+        "model": "auth.permission",
         "fields": {
-            "username": "doc", 
-            "first_name": "Doc", 
-            "last_name": "Dwarf", 
-            "is_active": true, 
-            "is_superuser": false, 
-            "is_staff": false, 
-            "last_login": "2007-06-24T00:03:08+00:00", 
-            "groups": [], 
+            "codename": "change_localsiteprofile",
+            "name": "Can change local site profile",
+            "content_type": 12
+        }
+    },
+    {
+        "pk": 34,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_localsiteprofile",
+            "name": "Can delete local site profile",
+            "content_type": 12
+        }
+    },
+    {
+        "pk": 29,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_profile",
+            "name": "Can add profile",
+            "content_type": 11
+        }
+    },
+    {
+        "pk": 32,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_profile",
+            "name": "Can change profile",
+            "content_type": 11
+        }
+    },
+    {
+        "pk": 35,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_profile",
+            "name": "Can delete profile",
+            "content_type": 11
+        }
+    },
+    {
+        "pk": 30,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_reviewrequestvisit",
+            "name": "Can add review request visit",
+            "content_type": 10
+        }
+    },
+    {
+        "pk": 33,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_reviewrequestvisit",
+            "name": "Can change review request visit",
+            "content_type": 10
+        }
+    },
+    {
+        "pk": 36,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_reviewrequestvisit",
+            "name": "Can delete review request visit",
+            "content_type": 10
+        }
+    },
+    {
+        "pk": 1,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_logentry",
+            "name": "Can add log entry",
+            "content_type": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_logentry",
+            "name": "Can change log entry",
+            "content_type": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_logentry",
+            "name": "Can delete log entry",
+            "content_type": 1
+        }
+    },
+    {
+        "pk": 37,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_fileattachment",
+            "name": "Can add file attachment",
+            "content_type": 13
+        }
+    },
+    {
+        "pk": 38,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_fileattachment",
+            "name": "Can change file attachment",
+            "content_type": 13
+        }
+    },
+    {
+        "pk": 39,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_fileattachment",
+            "name": "Can delete file attachment",
+            "content_type": 13
+        }
+    },
+    {
+        "pk": 4,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_group",
+            "name": "Can add group",
+            "content_type": 3
+        }
+    },
+    {
+        "pk": 7,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_group",
+            "name": "Can change group",
+            "content_type": 3
+        }
+    },
+    {
+        "pk": 10,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_group",
+            "name": "Can delete group",
+            "content_type": 3
+        }
+    },
+    {
+        "pk": 5,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_permission",
+            "name": "Can add permission",
+            "content_type": 2
+        }
+    },
+    {
+        "pk": 8,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_permission",
+            "name": "Can change permission",
+            "content_type": 2
+        }
+    },
+    {
+        "pk": 11,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_permission",
+            "name": "Can delete permission",
+            "content_type": 2
+        }
+    },
+    {
+        "pk": 6,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_user",
+            "name": "Can add user",
+            "content_type": 4
+        }
+    },
+    {
+        "pk": 9,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_user",
+            "name": "Can change user",
+            "content_type": 4
+        }
+    },
+    {
+        "pk": 12,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_user",
+            "name": "Can delete user",
+            "content_type": 4
+        }
+    },
+    {
+        "pk": 40,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_changedescription",
+            "name": "Can add change description",
+            "content_type": 14
+        }
+    },
+    {
+        "pk": 41,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_changedescription",
+            "name": "Can change change description",
+            "content_type": 14
+        }
+    },
+    {
+        "pk": 42,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_changedescription",
+            "name": "Can delete change description",
+            "content_type": 14
+        }
+    },
+    {
+        "pk": 13,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_contenttype",
+            "name": "Can add content type",
+            "content_type": 5
+        }
+    },
+    {
+        "pk": 14,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_contenttype",
+            "name": "Can change content type",
+            "content_type": 5
+        }
+    },
+    {
+        "pk": 15,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_contenttype",
+            "name": "Can delete content type",
+            "content_type": 5
+        }
+    },
+    {
+        "pk": 43,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_diffset",
+            "name": "Can add diff set",
+            "content_type": 17
+        }
+    },
+    {
+        "pk": 47,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_diffset",
+            "name": "Can change diff set",
+            "content_type": 17
+        }
+    },
+    {
+        "pk": 51,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_diffset",
+            "name": "Can delete diff set",
+            "content_type": 17
+        }
+    },
+    {
+        "pk": 44,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_diffsethistory",
+            "name": "Can add diff set history",
+            "content_type": 18
+        }
+    },
+    {
+        "pk": 48,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_diffsethistory",
+            "name": "Can change diff set history",
+            "content_type": 18
+        }
+    },
+    {
+        "pk": 52,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_diffsethistory",
+            "name": "Can delete diff set history",
+            "content_type": 18
+        }
+    },
+    {
+        "pk": 45,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_filediff",
+            "name": "Can add file diff",
+            "content_type": 16
+        }
+    },
+    {
+        "pk": 49,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_filediff",
+            "name": "Can change file diff",
+            "content_type": 16
+        }
+    },
+    {
+        "pk": 53,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_filediff",
+            "name": "Can delete file diff",
+            "content_type": 16
+        }
+    },
+    {
+        "pk": 46,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_filediffdata",
+            "name": "Can add file diff data",
+            "content_type": 15
+        }
+    },
+    {
+        "pk": 50,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_filediffdata",
+            "name": "Can change file diff data",
+            "content_type": 15
+        }
+    },
+    {
+        "pk": 54,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_filediffdata",
+            "name": "Can delete file diff data",
+            "content_type": 15
+        }
+    },
+    {
+        "pk": 100,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_evolution",
+            "name": "Can add evolution",
+            "content_type": 34
+        }
+    },
+    {
+        "pk": 102,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_evolution",
+            "name": "Can change evolution",
+            "content_type": 34
+        }
+    },
+    {
+        "pk": 104,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_evolution",
+            "name": "Can delete evolution",
+            "content_type": 34
+        }
+    },
+    {
+        "pk": 101,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_version",
+            "name": "Can add version",
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 103,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_version",
+            "name": "Can change version",
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 105,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_version",
+            "name": "Can delete version",
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 22,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_registeredextension",
+            "name": "Can add registered extension",
+            "content_type": 8
+        }
+    },
+    {
+        "pk": 23,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_registeredextension",
+            "name": "Can change registered extension",
+            "content_type": 8
+        }
+    },
+    {
+        "pk": 24,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_registeredextension",
+            "name": "Can delete registered extension",
+            "content_type": 8
+        }
+    },
+    {
+        "pk": 55,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_hostingserviceaccount",
+            "name": "Can add hosting service account",
+            "content_type": 19
+        }
+    },
+    {
+        "pk": 56,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_hostingserviceaccount",
+            "name": "Can change hosting service account",
+            "content_type": 19
+        }
+    },
+    {
+        "pk": 57,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_hostingserviceaccount",
+            "name": "Can delete hosting service account",
+            "content_type": 19
+        }
+    },
+    {
+        "pk": 58,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_action",
+            "name": "Can add action",
+            "content_type": 29
+        }
+    },
+    {
+        "pk": 68,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_action",
+            "name": "Can change action",
+            "content_type": 29
+        }
+    },
+    {
+        "pk": 79,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_action",
+            "name": "Can delete action",
+            "content_type": 29
+        }
+    },
+    {
+        "pk": 59,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_comment",
+            "name": "Can add comment",
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 69,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_comment",
+            "name": "Can change comment",
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 80,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_comment",
+            "name": "Can delete comment",
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 60,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_defaultreviewer",
+            "name": "Can add default reviewer",
+            "content_type": 21
+        }
+    },
+    {
+        "pk": 70,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_defaultreviewer",
+            "name": "Can change default reviewer",
+            "content_type": 21
+        }
+    },
+    {
+        "pk": 81,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_defaultreviewer",
+            "name": "Can delete default reviewer",
+            "content_type": 21
+        }
+    },
+    {
+        "pk": 61,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_fileattachmentcomment",
+            "name": "Can add file attachment comment",
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 71,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_fileattachmentcomment",
+            "name": "Can change file attachment comment",
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 82,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_fileattachmentcomment",
+            "name": "Can delete file attachment comment",
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 63,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_group",
+            "name": "Can add review group",
+            "content_type": 20
+        }
+    },
+    {
+        "pk": 73,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_group",
+            "name": "Can change review group",
+            "content_type": 20
+        }
+    },
+    {
+        "pk": 84,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_group",
+            "name": "Can delete review group",
+            "content_type": 20
+        }
+    },
+    {
+        "pk": 62,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_review",
+            "name": "Can add review",
+            "content_type": 28
+        }
+    },
+    {
+        "pk": 72,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_review",
+            "name": "Can change review",
+            "content_type": 28
+        }
+    },
+    {
+        "pk": 83,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_review",
+            "name": "Can delete review",
+            "content_type": 28
+        }
+    },
+    {
+        "pk": 64,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_reviewrequest",
+            "name": "Can add review request",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 78,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "can_change_status",
+            "name": "Can change status",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 89,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "can_edit_reviewrequest",
+            "name": "Can edit review request",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 90,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "can_submit_as_another_user",
+            "name": "Can submit as another user",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 74,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_reviewrequest",
+            "name": "Can change review request",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 85,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_reviewrequest",
+            "name": "Can delete review request",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 65,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_reviewrequestdraft",
+            "name": "Can add review request draft",
+            "content_type": 24
+        }
+    },
+    {
+        "pk": 75,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_reviewrequestdraft",
+            "name": "Can change review request draft",
+            "content_type": 24
+        }
+    },
+    {
+        "pk": 86,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_reviewrequestdraft",
+            "name": "Can delete review request draft",
+            "content_type": 24
+        }
+    },
+    {
+        "pk": 66,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_screenshot",
+            "name": "Can add screenshot",
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 76,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_screenshot",
+            "name": "Can change screenshot",
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 87,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_screenshot",
+            "name": "Can delete screenshot",
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 67,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_screenshotcomment",
+            "name": "Can add screenshot comment",
+            "content_type": 26
+        }
+    },
+    {
+        "pk": 77,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_screenshotcomment",
+            "name": "Can change screenshot comment",
+            "content_type": 26
+        }
+    },
+    {
+        "pk": 88,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_screenshotcomment",
+            "name": "Can delete screenshot comment",
+            "content_type": 26
+        }
+    },
+    {
+        "pk": 91,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_repository",
+            "name": "Can add repository",
+            "content_type": 31
+        }
+    },
+    {
+        "pk": 93,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_repository",
+            "name": "Can change repository",
+            "content_type": 31
+        }
+    },
+    {
+        "pk": 95,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_repository",
+            "name": "Can delete repository",
+            "content_type": 31
+        }
+    },
+    {
+        "pk": 92,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_tool",
+            "name": "Can add tool",
+            "content_type": 30
+        }
+    },
+    {
+        "pk": 94,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_tool",
+            "name": "Can change tool",
+            "content_type": 30
+        }
+    },
+    {
+        "pk": 96,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_tool",
+            "name": "Can delete tool",
+            "content_type": 30
+        }
+    },
+    {
+        "pk": 19,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_session",
+            "name": "Can add session",
+            "content_type": 7
+        }
+    },
+    {
+        "pk": 20,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_session",
+            "name": "Can change session",
+            "content_type": 7
+        }
+    },
+    {
+        "pk": 21,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_session",
+            "name": "Can delete session",
+            "content_type": 7
+        }
+    },
+    {
+        "pk": 97,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_localsite",
+            "name": "Can add local site",
+            "content_type": 32
+        }
+    },
+    {
+        "pk": 98,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_localsite",
+            "name": "Can change local site",
+            "content_type": 32
+        }
+    },
+    {
+        "pk": 99,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_localsite",
+            "name": "Can delete local site",
+            "content_type": 32
+        }
+    },
+    {
+        "pk": 25,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_siteconfiguration",
+            "name": "Can add site configuration",
+            "content_type": 9
+        }
+    },
+    {
+        "pk": 26,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_siteconfiguration",
+            "name": "Can change site configuration",
+            "content_type": 9
+        }
+    },
+    {
+        "pk": 27,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_siteconfiguration",
+            "name": "Can delete site configuration",
+            "content_type": 9
+        }
+    },
+    {
+        "pk": 16,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_site",
+            "name": "Can add site",
+            "content_type": 6
+        }
+    },
+    {
+        "pk": 17,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_site",
+            "name": "Can change site",
+            "content_type": 6
+        }
+    },
+    {
+        "pk": 18,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_site",
+            "name": "Can delete site",
+            "content_type": 6
+        }
+    },
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "admin",
+            "first_name": "Admin",
+            "last_name": "User",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2010-12-03T16:48:53Z",
+            "groups": [],
             "user_permissions": [],
-            "password": "sha1$3d041$6700c5db6c46bf90d3b3c2716f5b60fb30ede072", 
-            "email": "doc@example.com", 
-            "date_joined": "2007-06-24T00:03:08+00:00"
+            "password": "sha1$b2c09$12c1820af5195a026c703a6149467800d7937dd6",
+            "email": "admin@example.com",
+            "date_joined": "2007-06-24T00:02:37Z"
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "auth.user", 
+        "pk": 2,
+        "model": "auth.user",
         "fields": {
-            "username": "dopey", 
-            "first_name": "Dopey", 
-            "last_name": "Dwarf", 
-            "is_active": true, 
-            "is_superuser": false, 
-            "is_staff": false, 
-            "last_login": "2007-06-24T00:03:14+00:00", 
-            "groups": [], 
-            "user_permissions": [], 
-            "password": "sha1$4ff27$f7753bda33cc04efc49b7e7dd0cbd519677a3bdc", 
-            "email": "dopey@example.com", 
-            "date_joined": "2007-06-24T00:03:14+00:00"
+            "username": "doc",
+            "first_name": "Doc",
+            "last_name": "Dwarf",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2007-06-24T00:03:08Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$3d041$6700c5db6c46bf90d3b3c2716f5b60fb30ede072",
+            "email": "doc@example.com",
+            "date_joined": "2007-06-24T00:03:08Z"
         }
-    }, 
+    },
     {
-        "pk": 4, 
-        "model": "auth.user", 
+        "pk": 3,
+        "model": "auth.user",
         "fields": {
-            "username": "grumpy", 
-            "first_name": "Grumpy", 
-            "last_name": "Dwarf", 
-            "is_active": true, 
-            "is_superuser": false, 
-            "is_staff": false, 
-            "last_login": "2007-06-24T00:03:20+00:00", 
-            "groups": [], 
-            "user_permissions": [], 
-            "password": "sha1$e38cf$ebcabd0c95ec5c5f02b34e2da3a3aba69edb09c4", 
-            "email": "grumpy@example.com", 
-            "date_joined": "2007-06-24T00:03:20+00:00"
+            "username": "dopey",
+            "first_name": "Dopey",
+            "last_name": "Dwarf",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2007-06-24T00:03:14Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$4ff27$f7753bda33cc04efc49b7e7dd0cbd519677a3bdc",
+            "email": "dopey@example.com",
+            "date_joined": "2007-06-24T00:03:14Z"
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "accounts.reviewrequestvisit", 
+        "pk": 4,
+        "model": "auth.user",
         "fields": {
-            "timestamp": "2010-12-02T10:57:37+00:00", 
-            "review_request": 9, 
+            "username": "grumpy",
+            "first_name": "Grumpy",
+            "last_name": "Dwarf",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2007-06-24T00:03:20Z",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$e38cf$ebcabd0c95ec5c5f02b34e2da3a3aba69edb09c4",
+            "email": "grumpy@example.com",
+            "date_joined": "2007-06-24T00:03:20Z"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "accounts.reviewrequestvisit",
+        "fields": {
+            "timestamp": "2010-12-02T10:57:37Z",
+            "review_request": 9,
             "user": 1
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "accounts.profile", 
+        "pk": 2,
+        "model": "accounts.reviewrequestvisit",
         "fields": {
-            "review_request_columns": "star,summary,submitter,time_added,last_updated_since", 
-            "starred_groups": [], 
-            "dashboard_columns": "new_updates,star,summary,submitter,time_added,last_updated_since", 
-            "sort_group_columns": "", 
-            "show_submitted": true, 
-            "sort_submitter_columns": "", 
-            "sort_dashboard_columns": "-last_updated", 
-            "submitter_columns": "", 
-            "user": 1, 
-            "first_time_setup_done": true, 
-            "wordwrapped_diffs": true, 
-            "group_columns": "", 
-            "collapsed_diffs": true, 
-            "starred_review_requests": [], 
-            "sort_review_request_columns": "-last_updated", 
-            "syntax_highlighting": true,
-            "is_private": false
+            "timestamp": "2007-06-24T00:28:33Z",
+            "review_request": 3,
+            "user": 1
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "accounts.profile", 
+        "pk": 1,
+        "model": "accounts.profile",
         "fields": {
-            "review_request_columns": "", 
-            "starred_groups": [], 
-            "dashboard_columns": "", 
-            "sort_group_columns": "", 
-            "show_submitted": true, 
-            "sort_submitter_columns": "", 
-            "sort_dashboard_columns": "", 
-            "submitter_columns": "", 
-            "user": 2, 
-            "first_time_setup_done": true, 
-            "wordwrapped_diffs": true, 
-            "group_columns": "", 
-            "collapsed_diffs": true, 
-            "starred_review_requests": [], 
-            "sort_review_request_columns": "", 
-            "syntax_highlighting": true,
-            "is_private": false
+            "review_request_columns": "star,summary,submitter,time_added,last_updated_since",
+            "starred_groups": [],
+            "sort_review_request_columns": "-last_updated",
+            "dashboard_columns": "new_updates,star,summary,submitter,time_added,last_updated_since",
+            "sort_group_columns": "",
+            "show_submitted": true,
+            "sort_submitter_columns": "",
+            "sort_dashboard_columns": "-last_updated",
+            "timezone": "UTC",
+            "submitter_columns": "",
+            "user": 1,
+            "first_time_setup_done": true,
+            "wordwrapped_diffs": true,
+            "group_columns": "",
+            "collapsed_diffs": true,
+            "open_an_issue": true,
+            "starred_review_requests": [],
+            "is_private": false,
+            "syntax_highlighting": true
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "accounts.profile", 
+        "pk": 2,
+        "model": "accounts.profile",
         "fields": {
-            "review_request_columns": "", 
-            "starred_groups": [], 
-            "dashboard_columns": "", 
-            "sort_group_columns": "", 
-            "show_submitted": true, 
-            "sort_submitter_columns": "", 
-            "sort_dashboard_columns": "", 
-            "submitter_columns": "", 
-            "user": 4, 
-            "first_time_setup_done": true, 
-            "wordwrapped_diffs": true, 
-            "group_columns": "", 
-            "collapsed_diffs": true, 
-            "starred_review_requests": [], 
-            "sort_review_request_columns": "", 
-            "syntax_highlighting": true,
-            "is_private": false
+            "review_request_columns": "",
+            "starred_groups": [],
+            "sort_review_request_columns": "",
+            "dashboard_columns": "",
+            "sort_group_columns": "",
+            "show_submitted": true,
+            "sort_submitter_columns": "",
+            "sort_dashboard_columns": "",
+            "timezone": "UTC",
+            "submitter_columns": "",
+            "user": 2,
+            "first_time_setup_done": true,
+            "wordwrapped_diffs": true,
+            "group_columns": "",
+            "collapsed_diffs": true,
+            "open_an_issue": true,
+            "starred_review_requests": [],
+            "is_private": false,
+            "syntax_highlighting": true
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "accounts.localsiteprofile", 
+        "pk": 3,
+        "model": "accounts.profile",
         "fields": {
-            "profile": 1, 
-            "direct_incoming_request_count": 0, 
-            "local_site": null, 
-            "starred_public_request_count": 0, 
-            "total_outgoing_request_count": 4, 
-            "pending_outgoing_request_count": 4, 
-            "user": 1, 
+            "review_request_columns": "",
+            "starred_groups": [],
+            "sort_review_request_columns": "",
+            "dashboard_columns": "",
+            "sort_group_columns": "",
+            "show_submitted": true,
+            "sort_submitter_columns": "",
+            "sort_dashboard_columns": "",
+            "timezone": "UTC",
+            "submitter_columns": "",
+            "user": 4,
+            "first_time_setup_done": true,
+            "wordwrapped_diffs": true,
+            "group_columns": "",
+            "collapsed_diffs": true,
+            "open_an_issue": true,
+            "starred_review_requests": [],
+            "is_private": false,
+            "syntax_highlighting": true
+        }
+    },
+    {
+        "pk": 1,
+        "model": "accounts.localsiteprofile",
+        "fields": {
+            "profile": 1,
+            "direct_incoming_request_count": 0,
+            "local_site": null,
+            "starred_public_request_count": 0,
+            "total_outgoing_request_count": 4,
+            "pending_outgoing_request_count": 4,
+            "user": 1,
             "total_incoming_request_count": 0
         }
-    }, 
+    },
     {
-        "pk": 2, 
-        "model": "accounts.localsiteprofile", 
+        "pk": 2,
+        "model": "accounts.localsiteprofile",
         "fields": {
-            "profile": 2, 
-            "direct_incoming_request_count": 2, 
-            "local_site": null, 
-            "starred_public_request_count": 0, 
-            "total_outgoing_request_count": 2, 
-            "pending_outgoing_request_count": 1, 
-            "user": 2, 
+            "profile": 2,
+            "direct_incoming_request_count": 2,
+            "local_site": null,
+            "starred_public_request_count": 0,
+            "total_outgoing_request_count": 2,
+            "pending_outgoing_request_count": 1,
+            "user": 2,
             "total_incoming_request_count": 3
         }
-    }, 
+    },
     {
-        "pk": 3, 
-        "model": "accounts.localsiteprofile", 
+        "pk": 3,
+        "model": "accounts.localsiteprofile",
         "fields": {
-            "profile": 3, 
-            "direct_incoming_request_count": 1, 
-            "local_site": null, 
-            "starred_public_request_count": 0, 
-            "total_outgoing_request_count": 1, 
-            "pending_outgoing_request_count": 1, 
-            "user": 4, 
+            "profile": 3,
+            "direct_incoming_request_count": 1,
+            "local_site": null,
+            "starred_public_request_count": 0,
+            "total_outgoing_request_count": 1,
+            "pending_outgoing_request_count": 1,
+            "user": 4,
             "total_incoming_request_count": 2
         }
-    }, 
+    },
     {
-        "pk": 4, 
-        "model": "accounts.localsiteprofile", 
+        "pk": 4,
+        "model": "accounts.localsiteprofile",
         "fields": {
-            "profile": 1, 
-            "direct_incoming_request_count": 0, 
-            "local_site": 1, 
-            "starred_public_request_count": 0, 
-            "total_outgoing_request_count": -1, 
-            "pending_outgoing_request_count": -1, 
-            "user": 1, 
+            "profile": 1,
+            "direct_incoming_request_count": 0,
+            "local_site": 1,
+            "starred_public_request_count": 0,
+            "total_outgoing_request_count": -1,
+            "pending_outgoing_request_count": -1,
+            "user": 1,
             "total_incoming_request_count": 0
         }
     }

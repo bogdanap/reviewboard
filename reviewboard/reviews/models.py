@@ -17,7 +17,8 @@ from reviewboard.changedescs.models import ChangeDescription
 from reviewboard.diffviewer.models import DiffSet, DiffSetHistory, FileDiff
 from reviewboard.attachments.models import FileAttachment
 from reviewboard.reviews.errors import PermissionError
-from reviewboard.reviews.managers import DefaultReviewerManager, \
+from reviewboard.reviews.managers import ActionFeedManager, \
+                                         DefaultReviewerManager, \
                                          ReviewGroupManager, \
                                          ReviewRequestManager, \
                                          ReviewManager
@@ -61,7 +62,7 @@ class Group(models.Model):
     objects = ReviewGroupManager()
 
     def is_accessible_by(self, user):
-        "Returns true if the user can access this group."""
+        """Returns true if the user can access this group."""
         if self.local_site and not self.local_site.is_accessible_by(user):
             return False
 
@@ -722,11 +723,6 @@ class ReviewRequest(BaseReviewRequestDetails):
         if update_counts or self.id is None:
             self._update_counts()
 
-        if self.status != self.PENDING_REVIEW:
-            # If this is not a pending review request now, delete any
-            # and all ReviewRequestVisit objects.
-            self.visits.all().delete()
-
         super(ReviewRequest, self).save(**kwargs)
 
     def delete(self, **kwargs):
@@ -792,7 +788,7 @@ class ReviewRequest(BaseReviewRequestDetails):
             self.changedescs.add(changedesc)
             self.status = type
             self.save(update_counts=True)
-
+            action_verb = Action.CLOSED_REQUEST
             review_request_closed.send(sender=self.__class__, user=user,
                                        review_request=self,
                                        type=type)
@@ -802,9 +798,19 @@ class ReviewRequest(BaseReviewRequestDetails):
             changedesc.timestamp = timezone.now()
             changedesc.text = description or ""
             changedesc.save()
-
+            action_verb = Action.UPDATED_SUBMISSION_DESCRIPTION
             # Needed to renew last-update.
             self.save()
+
+        if user:
+            Action.objects.create(review_request=self,
+                                  summary=self.summary,
+                                  verb=action_verb,
+                                  submitter=user,
+                                  review=None,
+                                  changedesc=changedesc,
+                                  local_id=self.local_id,
+                                  local_site=self.local_site)
 
         try:
             draft = self.draft.get()
@@ -841,10 +847,20 @@ class ReviewRequest(BaseReviewRequestDetails):
             self.status = self.PENDING_REVIEW
             self.save(update_counts=True)
 
+            if user:
+                Action.objects.create(review_request=self,
+                                      summary=self.summary,
+                                      verb=Action.REOPENED_REQUEST,
+                                      submitter=user,
+                                      review=None,
+                                      changedesc=changedesc,
+                                      local_id=self.local_id,
+                                      local_site=self.local_site)
+
         review_request_reopened.send(sender=self.__class__, user=user,
                                      review_request=self)
 
-    def update_changenum(self,changenum, user=None):
+    def update_changenum(self, changenum, user=None):
         if (user and not self.is_mutable_by(user)):
             raise PermissionError
 
@@ -895,6 +911,16 @@ class ReviewRequest(BaseReviewRequestDetails):
 
         self.public = True
         self.save(update_counts=True)
+
+        if changes is not None:
+            Action.objects.create(review_request=self,
+                                  summary=self.summary,
+                                  verb=Action.UPDATED_REQUEST,
+                                  submitter=user,
+                                  review=None,
+                                  changedesc=changes,
+                                  local_id=self.local_id,
+                                  local_site=self.local_site)
 
         review_request_published.send(sender=self.__class__, user=user,
                                       review_request=self,
@@ -1691,11 +1717,22 @@ class Review(models.Model):
             self.review_request.increment_shipit_count()
 
         if self.is_reply():
+            action_verb = Action.PUBLISHED_REPLY
             reply_published.send(sender=self.__class__,
                                  user=user, reply=self)
         else:
+            action_verb = Action.PUBLISHED_REVIEW
             review_published.send(sender=self.__class__,
                                   user=user, review=self)
+
+        Action.objects.create(review_request=self.review_request,
+                              summary=self.review_request.summary,
+                              verb=action_verb,
+                              submitter=user,
+                              review=self,
+                              changedesc=None,
+                              local_id=self.review_request.local_id,
+                              local_site=self.review_request.local_site,)
 
     def delete(self):
         """
@@ -1725,4 +1762,71 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['timestamp']
+        get_latest_by = 'timestamp'
+
+
+class Action(models.Model):
+    """Action feed storage."""
+
+    CLOSED_REQUEST                 = "C"
+    PUBLISHED_REPLY                = "R"
+    PUBLISHED_REVIEW               = "E"
+    REOPENED_REQUEST               = "O"
+    UPDATED_REQUEST                = "U"
+    UPDATED_SUBMISSION_DESCRIPTION = "S"
+
+    VERBS = (
+        (CLOSED_REQUEST,                 _('closed the request')),
+        (PUBLISHED_REPLY,                _('published a reply')),
+        (PUBLISHED_REVIEW,               _('published a review')),
+        (REOPENED_REQUEST,               _('reopened the request')),
+        (UPDATED_REQUEST,                _('updated the request')),
+        (UPDATED_SUBMISSION_DESCRIPTION,
+            _('updated the submission description')),
+    )
+
+    review_request = models.ForeignKey(ReviewRequest,
+                                       verbose_name=_("review request"))
+    summary = models.CharField(_('summary'), max_length=300, default='')
+    submitter = models.ForeignKey(User, verbose_name=_("submitter"))
+    timestamp = models.DateTimeField(_("timestamp"), default=timezone.now,
+                                     db_index=True)
+    review = models.ForeignKey(Review,
+                               verbose_name=_("review"),
+                               null=True)
+    changedesc = models.ForeignKey(ChangeDescription,
+                                   verbose_name=_("changedesc"),
+                                   null=True)
+    verb = models.CharField(_('verb'), max_length=1, choices=VERBS)
+    local_site = models.ForeignKey(LocalSite, verbose_name=_("local site"),
+                                   blank=True, null=True)
+    local_id = models.IntegerField('site-local ID', blank=True, null=True)
+
+    objects = ActionFeedManager()
+
+    @property
+    def request_display_id(self):
+        """Gets the ID which should be exposed to the user."""
+        if self.local_site_id:
+            return self.local_id
+        else:
+            return self.review_request_id
+
+    @property
+    def type(self):
+        """Return one of these strings: 'review', 'reply', 'change'"""
+        if self.changedesc_id:
+            return 'change'
+        elif self.verb == self.PUBLISHED_REPLY:
+            return 'reply'
+        else:
+            return 'review'
+
+    @property
+    def display_verb(self):
+        # 'get_verb_display' provided automatically by Django for the verb field
+        return self.get_verb_display()
+
+    class Meta:
+        ordering = ['-timestamp']
         get_latest_by = 'timestamp'

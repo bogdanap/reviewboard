@@ -5,6 +5,8 @@ Resources
 .. toctree::
    :maxdepth: 1
 
+   action
+   action-list
    change-list
    change
    diff-list

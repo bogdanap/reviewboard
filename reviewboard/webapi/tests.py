@@ -15,6 +15,7 @@ from djblets.webapi.errors import DOES_NOT_EXIST, INVALID_FORM_DATA, \
 import paramiko
 
 from reviewboard import initialize
+from reviewboard.accounts.models import ReviewRequestVisit
 from reviewboard.attachments.models import FileAttachment
 from reviewboard.changedescs.models import ChangeDescription
 from reviewboard.diffviewer.models import DiffSet
@@ -6356,3 +6357,146 @@ class ReviewReplyFileAttachmentCommentResourceTests(BaseWebAPITestCase):
         reply_comment = FileAttachmentComment.objects.get(
             pk=rsp['file_attachment_comment']['id'])
         self.assertEqual(reply_comment.text, new_comment_text)
+
+
+class ActionResourceTests(BaseWebAPITestCase):
+    """Testing the ActionResource APIs."""
+    fixtures = ['test_users', 'test_scmtools', 'test_reviewrequests']
+
+    list_mimetype = _build_mimetype('actions')
+    item_mimetype = _build_mimetype('action')
+
+    def verify_fixture_action(self, action):
+        self.assertEqual(action['display_verb'], 'published a reply')
+        self.assertEqual(action['summary'],
+                'Add permission checking for JSON API')
+        self.assertEqual(action['verb'], 'R')
+        self.assertEqual(action['type'], 'reply')
+        self.assertEqual(action['links']['submitter']['title'],'grumpy')
+
+    def create_and_visit_request(self):
+        rsp = self._postNewReviewRequest()
+        review_request = ReviewRequest.objects.get(pk=rsp['review_request']['id'])
+        visit = ReviewRequestVisit(user=self.user,
+                review_request=review_request)
+        visit.save()
+        return review_request
+
+    def test_get_empty_action_list(self):
+        """Testing the GET /session/actions API with empty list"""
+        rsp = self.apiGet(self.get_list_url(),
+                          expected_mimetype=self.list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertTrue('actions' in rsp)
+        self.assertEqual(len(rsp['actions']), 0)
+
+    def test_get_action_list(self):
+        """Testing the GET /session/actions with content"""
+        self._login_user(False, True)
+        rsp = self.apiGet(self.get_list_url(),
+                          expected_mimetype=self.list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertTrue('actions' in rsp)
+        self.assertEqual(len(rsp['actions']), 1)
+        action = rsp['actions'][0]
+        self.verify_fixture_action(action)
+
+    def test_get_action_list_anonymous(self):
+        """Testing the GET /session/actions as an anonymous user"""
+        self.client.logout()
+        rsp = self.apiGet(self.get_list_url(),
+                          expected_status=401)
+
+    def test_get_action_list_with_site(self):
+        """Testing the GET /session/actions API with a local site"""
+        self._login_user(True)
+        rsp = self.apiGet(self.get_list_url(),
+                          expected_mimetype=self.list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertTrue('actions' in rsp)
+        self.assertEqual(len(rsp['actions']), 0)
+
+    def test_get_action_list_with_site_no_access(self):
+        """Testing the GET /session/actions API with a local site and Permission Denied error"""
+        self.apiGet(self.get_list_url(self.local_site_name),
+                    expected_status=404)
+
+    def test_get_action_item(self):
+        """Testing the GET /session/actions/<id> API"""
+        self._login_user(False, True)
+        rsp = self.apiGet(self.get_url(1),
+                          expected_mimetype=self.item_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.verify_fixture_action(rsp['action'])
+
+    def test_action_created_after_review(self):
+        """Testing the GET /sessions/actions/ API after a review is posted"""
+        review_request = self.create_and_visit_request()
+        rsp = self._postNewReview(review_request)
+        review = Review.objects.get(pk=rsp['review']['id'])
+        review.publish()
+        rsp = self.apiGet(self.get_list_url(),
+                          expected_mimetype=self.list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertTrue('actions' in rsp)
+        self.assertEqual(rsp['total_results'], 1)
+        action = rsp['actions'][0]
+        self.assertEqual(action['display_verb'], 'published a review')
+        self.assertEqual(action['summary'], '')
+        self.assertEqual(action['verb'], 'E')
+        self.assertEqual(action['type'], 'review')
+        self.assertEqual(action['links']['submitter']['title'],'grumpy')
+
+    def test_action_created_after_reply(self):
+        """Testing the GET /sessions/actions/ API after a reply is posted"""
+        review_request = self.create_and_visit_request()
+        rsp = self._postNewReview(review_request)
+        review = Review.objects.get(pk=rsp['review']['id'])
+        review.publish()
+        rsp = self.apiPost(ReviewReplyResourceTests.get_list_url(review), {
+                'body_top': 'Test',
+            }, expected_mimetype=ReviewReplyResourceTests.item_mimetype)
+        reply= Review.objects.get(pk=rsp['reply']['id'])
+        reply.publish()
+        rsp = self.apiGet(self.get_list_url(),
+                          expected_mimetype=self.list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertTrue('actions' in rsp)
+        self.assertEqual(rsp['total_results'], 2)
+        action = rsp['actions'][0]
+        self.assertEqual(action['display_verb'], 'published a reply')
+        self.assertEqual(action['verb'], 'R')
+        self.assertEqual(action['type'], 'reply')
+        self.assertEqual(action['links']['submitter']['title'],'grumpy')
+
+    def test_action_created_after_change(self):
+        """Testing the GET /session/actions/ API after a review is changed"""
+        changedesc_text = 'Change description text'
+        review_request = self.create_and_visit_request()
+        review_request.publish(self.user)
+        draft = ReviewRequestDraft.create(review_request)
+        draft.summary = "New summary"
+        draft.changedesc.text = changedesc_text
+        draft.changedesc.save()
+        draft.save()
+        review_request.publish(self.user)
+        rsp = self.apiGet(self.get_list_url(),
+                          expected_mimetype=self.list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertTrue('actions' in rsp)
+        self.assertEqual(rsp['total_results'], 1)
+        action = rsp['actions'][0]
+        self.assertEqual(action['display_verb'], 'updated the request')
+        self.assertEqual(action['verb'], 'U')
+        self.assertEqual(action['type'], 'change')
+        self.assertEqual(action['links']['submitter']['title'],'grumpy')
+
+    def get_url(self, action_id, local_site_name=None):
+         return local_site_reverse('action-resource',
+                                   local_site_name=local_site_name,
+                                   kwargs={'action_id': action_id})
+
+    def get_list_url(self, local_site_name=None):
+        return local_site_reverse('actions-resource',
+                                  local_site_name=local_site_name)
+
